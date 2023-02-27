@@ -4,8 +4,7 @@ import java.time.LocalDate;
 
 public class Customer extends Person implements Billable{
 
-    private String specialNeeds;
-    private String pets;
+    private boolean pets;
     private boolean billable;
     private LocalDate firstDayAsCustomer;
 
@@ -17,21 +16,6 @@ public class Customer extends Person implements Billable{
     }
 
 
-    public String getSpecialNeeds() {
-        return specialNeeds;
-    }
-
-    public void setSpecialNeeds(String specialNeeds) {
-        this.specialNeeds = specialNeeds;
-    }
-
-    public String getPets() {
-        return pets;
-    }
-
-    public void setPets(String pets) {
-        this.pets = pets;
-    }
 
     public boolean isBillable() {
         return billable;

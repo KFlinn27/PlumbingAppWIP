@@ -3,23 +3,45 @@ package person;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Employee extends Person implements Billable{
+public class Employee extends Person implements Billable {
 
+    private Integer employID;
     private BigDecimal salary;
     private String department;
     private String position;
     private LocalDate startDate;
 
-    Employee(String firstName, String lastName, String streetAddress,
-             String zipcode, String phoneNumber, String emailAddress,
-             boolean startToday){
+    private LocalDate dateOfBirth;
+
+    public Employee(String firstName, String lastName, String streetAddress,
+                    String zipcode, String phoneNumber, String emailAddress,
+                    LocalDate startDate, LocalDate dateOfBirth) {
         super(firstName, lastName, streetAddress, zipcode,
-                phoneNumber,emailAddress);
-        if(startToday){
-            this.startDate = LocalDate.now();
-        }
+                phoneNumber, emailAddress);
+        this.startDate = startDate;
+        this.dateOfBirth = dateOfBirth;
     }
 
+    public String toString() {
+        String employee = "ID: " + this.employID + " represents " + super.getFirstName() + " " + super.getLastName();
+        return employee;
+    }
+
+    public Integer getEmployID() {
+        return employID;
+    }
+
+    public void setEmployID(Integer employID) {
+        this.employID = employID;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 
     public BigDecimal getSalary() {
         return salary;

@@ -1,6 +1,25 @@
+
+import person.Employee;
+import person.Person;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Company {
-    //map of billables, reference size of map from company to generate new identifier
-    //map of employees, reference size of map from company to generate new identifier
-    //map of tasks, refer size for iden
-    //map of materials, refer size for iden
+
+    private Map<Integer, Employee> employees;
+
+    public Company(){
+        employees = new HashMap<>();
+    }
+
+    public void addEmployee(Integer id, Employee employee) {
+            this.employees.put(id, employee);
+    }
+
+    public Employee getEmployee(int employeeID) {
+        return null;
+    }
 }

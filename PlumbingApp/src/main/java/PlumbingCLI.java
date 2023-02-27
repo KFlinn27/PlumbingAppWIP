@@ -1,52 +1,93 @@
 import Task.PlumbingMenu;
+import dao.JdbcEmployeeDao;
+import org.apache.commons.dbcp2.BasicDataSource;
+import person.Employee;
 
+
+import javax.sql.DataSource;
 import java.util.Scanner;
-
 public class PlumbingCLI {
+    PlumbingMenu menu = new PlumbingMenu();
+    JdbcEmployeeDao employeeDao;
 
-    public void run(){
-        PlumbingMenu menu = new PlumbingMenu();
+    public static void main(String[] args) {
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/plumbingCompany");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("postgres1");
+        PlumbingCLI application = new PlumbingCLI(dataSource);
+        application.run();
+    }
 
-        //write new customers to txt file?
-        //write all data to txt files?
-        //wait to learn about database integration
 
 
+    public PlumbingCLI(DataSource dataSource){
+        employeeDao = new JdbcEmployeeDao(dataSource);
+    }
+
+
+
+
+
+    public void run() {
+
+
+        Company kAndF = new Company();
 
 
         menu.displayMessage();
-        while(true){
+        while (true) {
             int choice = menu.displayInitialOptions();
             //manage company
-            if(choice == 1){
-                while(true){
+            if (choice == 1) {
+                while (true) {
                     //Company management
                     choice = menu.companyManagementOptions();
-                    if(choice == 1){
-                        //add new employee
-                        menu.hereMessage();
-                    }
-                    else if(choice == 2){
+                    if (choice == 1) {
+                        //create employee
+                        Employee created = createEmployee();
+                        created = employeeDao.createEmployee(created);
+                        // TODO who knows what was happening here
+                        System.out.println((created.getEmployID()));
+                    } else if (choice == 2) {
+                        //select an existing employee, query if ID select exists
+                        int employeeID = menu.selectEmployee();
+
                         //edit an existing employee
-                        menu.hereMessage();
-                    }
-                    else if(choice == 3){
+                        choice = menu.editEmployeeMessage();
+                        if (choice == 1) {
+                            kAndF.getEmployee(employeeID).setFirstName(menu.firstNameRequest());
+
+                        } else if (choice == 2) {
+
+                        } else if (choice == 3) {
+
+                        } else if (choice == 4) {
+
+                        } else if (choice == 5) {
+
+                        } else if (choice == 6) {
+
+                        } else if (choice == 7) {
+
+                        } else {
+                            break;
+                        }
+                    } else if (choice == 3) {
                         //add a task
                         menu.hereMessage();
-                    }
-                    else if(choice == 4){
+                    } else if (choice == 4) {
                         //edit a task
                         menu.hereMessage();
-                    }
-                    else{
+                    } else {
                         break;
                     }
                 }
             }
             //manage customer
 
-            else if(choice == 2){
-                while(true) {
+            else if (choice == 2) {
+                while (true) {
                     choice = menu.customerManagementOptions();
                     if (choice == 1) {
                         //add new customer
@@ -67,39 +108,36 @@ public class PlumbingCLI {
                         break;
                     }
                 }
-            }
-
-            else if(choice == 3){
+            } else if (choice == 3) {
                 //Plumbing Resources
-                while(true) {
+                while (true) {
                     choice = menu.plumbingResourceOptions();
-                    if(choice == 1){
+                    if (choice == 1) {
                         //offset calculator
-                    }
-                    else if(choice == 2){
+                    } else if (choice == 2) {
                         //access charlotte's dimension catalog
-                    }
-                    else if(choice == 3){
+                    } else if (choice == 3) {
                         //access ohio latest code pub
-                    }
-                    else{
+                    } else {
                         break;
                     }
                 }
             }
             //exit program
-            else{
+            else {
                 break;
             }
         }
         //Close out anything open or write leftover data
 
 
-
-
     }
 
+    public Employee createEmployee() {
+        return new Employee(menu.firstNameRequest(), menu.lastNameRequest(), menu.addressStreetRequest(),
+                menu.addressZipcodeRequest(), menu.phoneNumberRequest(), menu.emailAddressRequest(), menu.startDateRequest(), menu.dateOfBirthRequest());
 
+    }
 
 
 }
