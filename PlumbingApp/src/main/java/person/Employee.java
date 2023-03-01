@@ -3,7 +3,7 @@ package person;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Employee extends Person implements Billable {
+public class Employee extends Person implements Billable, Comparable<Employee> {
 
     private Integer employID;
     private BigDecimal salary;
@@ -22,6 +22,12 @@ public class Employee extends Person implements Billable {
         this.dateOfBirth = dateOfBirth;
     }
 
+    @Override
+    public int compareTo(Employee employee){
+        return this.employID - employee.getEmployID();
+    }
+
+    @Override
     public String toString() {
         String employee = "ID: " + this.employID + " represents " + super.getFirstName() + " " + super.getLastName();
         return employee;
@@ -73,5 +79,9 @@ public class Employee extends Person implements Billable {
 
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
+    }
+
+    public String fullName() {
+        return getFirstName() + " " + getLastName();
     }
 }

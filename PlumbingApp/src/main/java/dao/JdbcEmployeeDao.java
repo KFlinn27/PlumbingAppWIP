@@ -20,9 +20,14 @@ public class JdbcEmployeeDao implements EmployeeDao{
     @Override
     public List<Employee> getAllEmployees() {
         List<Employee> employees = new ArrayList<>();
-        //TODO write sql statement required
-        String sql = "SELECT ";
-        return null;
+
+        String sql = "SELECT employ_id, first_name, last_name, st_address, zip_code, phone_number, email, date_of_birth, date_of_hire " +
+            "From employee";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        while(results.next()){
+            employees.add(mapEmployeeFromRowSet(results));
+        }
+        return employees;
     }
 
 
@@ -36,8 +41,15 @@ public class JdbcEmployeeDao implements EmployeeDao{
         employee.setEmployID(empID);
         return employee;
 
-        // TODO: FINISH THIS DUDE HOLY
+    }
 
+    public void updateEmployee(Employee employee){
+        String sql = "UPDATE employee " +
+                "SET first_name = ?, last_name = ?, st_address = ?, zip_code = ?, phone_number = ?, email = ?, " +
+                "date_of_birth = ?, date_of_hire = ? WHERE employ_id = ?";
+        jdbcTemplate.update(sql, employee.getFirstName(), employee.getLastName(), employee.getStreetAddress(),
+                employee.getZipcode(), employee.getPhoneNumber(), employee.getEmailAddress(),
+                employee.getDateOfBirth(), employee.getStartDate(), employee.getEmployID());
 
     }
 
@@ -52,8 +64,14 @@ public class JdbcEmployeeDao implements EmployeeDao{
         LocalDate startDate = current.getDate("date_of_hire").toLocalDate();
         Employee employee = new Employee(current.getString("first_name"), current.getString("last_name"), current.getString("st_address"),
                 current.getString("zip_code"), current.getString("phone_number"), current.getString("email"),
-                current.getDate("start_date").toLocalDate(), current.getDate("date_of_birth").toLocalDate());
+                current.getDate("date_of_hire").toLocalDate(), current.getDate("date_of_birth").toLocalDate());
         employee.setStartDate(startDate);
+        employee.setEmployID(current.getInt("employ_id"));
         return employee;
+    }
+
+    public void removeEmployee(int employeeID) {
+        String sql = "DELETE FROM employee WHERE employ_id = ?";
+        jdbcTemplate.update(sql, employeeID);
     }
 }

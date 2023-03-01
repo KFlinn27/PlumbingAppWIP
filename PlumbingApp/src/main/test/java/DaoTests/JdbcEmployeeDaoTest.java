@@ -31,7 +31,6 @@ public class JdbcEmployeeDaoTest extends BaseDaoTest {
 
     @Test
     public void createEmployee_creates_matching_employee() {
-        //TODO create an employee
         testEmploy = sut.createEmployee(EMPLOYEE_1);
         EMPLOYEE_1.setEmployID(testEmploy.getEmployID());
         assertEmployeesMatch("The employees do not match", EMPLOYEE_1, testEmploy);
@@ -47,5 +46,6 @@ public class JdbcEmployeeDaoTest extends BaseDaoTest {
         Assert.assertEquals(expected.getPhoneNumber(), actual.getPhoneNumber());
         Assert.assertEquals(expected.getZipcode(), actual.getZipcode());
         Assert.assertEquals(expected.getStreetAddress(), actual.getStreetAddress());
+        System.err.println(message);
     }
 }

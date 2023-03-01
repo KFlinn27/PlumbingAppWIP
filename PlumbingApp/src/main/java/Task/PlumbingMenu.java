@@ -3,8 +3,11 @@ package Task;
 import person.Employee;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class PlumbingMenu {
 
@@ -25,7 +28,7 @@ public class PlumbingMenu {
         return userInput.nextLine();
     }
 
-    public String addressZipcodeRequest(){
+    public String zipcodeRequest(){
         System.out.println("What is the zipcode of the person you're adding?");
         return userInput.nextLine();
     }
@@ -59,10 +62,11 @@ public class PlumbingMenu {
         System.out.println();
         System.out.println("[1] Please enter 1 to add a new employee!");
         System.out.println("[2] Please enter 2 to edit an employee!");
-        System.out.println("[3] Please enter 3 to add a preset task!");
-        System.out.println("[4] Please enter 4 to edit a preset task!");
-        System.out.println("[5] Please enter 5 to be finished with company management.");
-        return userChoice(1, 5);
+        System.out.println("[3] Please enter 3 to view current employees!");
+        System.out.println("[4] Please enter 4 to add a preset task!");
+        System.out.println("[5] Please enter 5 to edit a preset task!");
+        System.out.println("[6] Please enter 6 to be finished with company management.");
+        return userChoice(1, 6);
     }
 
     public int editEmployeeMessage(){
@@ -74,8 +78,10 @@ public class PlumbingMenu {
         System.out.println("[5] Please enter 5 to edit their phone number!");
         System.out.println("[6] Please enter 6 to edit their email address!");
         System.out.println("[7] Please enter 7 to edit their start date!");
-        System.out.println("[8] Please enter 8 to finish editing.");
-        return userChoice(1, 8);
+        System.out.println("[8] Please enter 8 to edit their DOB!");
+        System.out.println("[9] Please enter 9 to delete an employee!");
+        System.out.println("[10] Please enter 10 to finish editing.");
+        return userChoice(1, 10);
     }
 
     public int customerManagementOptions(){
@@ -131,26 +137,82 @@ public class PlumbingMenu {
     public LocalDate startDateRequest() {
         System.out.println("Is this employee starting today?(Y/N)");
         String answer = userInput.nextLine();
-        LocalDate startDate;
+        LocalDate startDate = null;
         if (answer.equalsIgnoreCase("y")) {
             return LocalDate.now();
         } else {
-            System.out.println("What day will the employee start?(YYYY-MM-DD)");
-            //TODO vet this response to ensure accurate entry
-            answer = userInput.nextLine();
-            startDate = LocalDate.parse(answer);
+            while(true) {
+                System.out.println("What day will the employee start?(YYYY-MM-DD)");
+                answer = userInput.nextLine();
+                try {
+                    startDate = LocalDate.parse(answer);
+                } catch (DateTimeParseException e){
+                    System.out.println();
+                    System.err.println("You did not enter a valid string. Please enter a date as YYYY-MM-DD.");;
+                }
+                if(startDate != null){
+                    break;
+                }
+            }
+
         }
         return startDate;
     }
 
-    public int selectEmployee() {
-        System.out.println("What is the ID of the employee you would like to edit?");
+
+
+    public LocalDate dateOfBirthRequest() {
+        LocalDate dob = null;
+        while(true) {
+            System.out.println("What is the employee's DOB?(YYYY-MM-DD)");
+            String answer = userInput.nextLine();
+            try {
+                dob = LocalDate.parse(answer);
+            } catch (DateTimeParseException e){
+                System.out.println();
+                System.err.println("You did not enter a valid string. Please enter a date as YYYY-MM-DD.");;
+            }
+            if(dob != null){
+                break;
+            }
+        }
+        return dob;
+    }
+
+    public void listAllEmployees(TreeMap<Integer, Employee> employees) {
+        System.out.println("-------HERE ARE ALL EMPLOYEES----------");
+        for(Map.Entry<Integer, Employee> current : employees.entrySet()){
+            System.out.println(current.toString());
+        }
+        System.out.println("---------------------------------------");
+    }
+
+    public int selectEmployee(int option) {
+        if(option == 0) {
+            System.out.println("What is the ID of the employee you would like to edit?(Enter -1 to exit)");
+        }
+        else {
+            System.out.println("That ID is not valid. Please enter another ID or -1 to exit.");
+        }
         return Integer.parseInt(userInput.nextLine());
     }
 
-    public LocalDate dateOfBirthRequest() {
-        System.out.println("What is the employee's DOB?(YYYY-MM-DD)");
-        LocalDate dob = LocalDate.parse(userInput.nextLine());
-        return dob;
+    public int confirmEmployee(Employee employee) {
+        System.out.println(employee.toString());
+        System.out.println("Is this the employee you would like to edit?(Y/N)");
+        String correct = userInput.nextLine();
+        if(correct.equalsIgnoreCase("y")){
+            return employee.getEmployID();
+        }
+        else{
+            return 0;
+        }
+
+    }
+
+    public void employeeDeletionMessage(Employee employee) {
+
+        System.out.println(employee.fullName() + " was removed from the company.");
+        System.out.println("----------------------------------------");
     }
 }
