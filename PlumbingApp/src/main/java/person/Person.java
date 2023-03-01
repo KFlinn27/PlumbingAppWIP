@@ -22,8 +22,8 @@ public class Person {
 
     public Person(String firstName, String lastName, String streetAddress,
                   String zipcode, String phoneNumber, String emailAddress){
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
+        this.lastName = lastName.substring(0, 1).toUpperCase() + lastName.substring(1).toLowerCase();
         this.streetAddress = streetAddress;
         this.zipcode = zipcode;
         this.phoneNumber = phoneNumber;

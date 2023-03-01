@@ -43,6 +43,19 @@ public class JdbcEmployeeDao implements EmployeeDao{
 
     }
 
+    public List<Employee> getEmployeeAnniversaries() {
+        List<Employee> employees = new ArrayList<>();
+        String sql = "SELECT employ_id, first_name, last_name, st_address, zip_code, phone_number, email, date_of_birth, date_of_hire \n" +
+                "FROM employee \n" +
+                "WHERE EXTRACT(month from date_of_hire) = EXTRACT(month from now()) \n" +
+                "ORDER BY date_of_hire ASC;";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        while(results.next()){
+            employees.add(mapEmployeeFromRowSet(results));
+        }
+        return employees;
+    }
+
     public void updateEmployee(Employee employee){
         String sql = "UPDATE employee " +
                 "SET first_name = ?, last_name = ?, st_address = ?, zip_code = ?, phone_number = ?, email = ?, " +

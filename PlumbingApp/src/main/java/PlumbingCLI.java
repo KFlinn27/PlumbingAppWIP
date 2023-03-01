@@ -6,6 +6,9 @@ import person.Employee;
 
 
 import javax.sql.DataSource;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 public class PlumbingCLI {
@@ -25,6 +28,7 @@ public class PlumbingCLI {
 
     public PlumbingCLI(DataSource dataSource) {
         employeeDao = new JdbcEmployeeDao(dataSource);
+        customerDao = new JdbcCustomerDao(dataSource);
     }
 
 
@@ -50,10 +54,12 @@ public class PlumbingCLI {
             } else if (choice == 3) {
                 //Plumbing Resources
                 resources();
+            } else if(choice == 4){
+                break;
             }
             //exit program
             else {
-                break;
+                System.out.println("You should not see this, how did the user get to the else?");
             }
         }
         //Close out anything open or write leftover data
@@ -70,8 +76,11 @@ public class PlumbingCLI {
                 //access charlotte's dimension catalog
             } else if (choice == 3) {
                 //access ohio latest code pub
-            } else {
+            } else if(choice == 4){
                 break;
+            } else{
+                System.out.println("You shouldn't be seeing this. Contain the search");
+                choice = menu.plumbingResourceOptions();
             }
         }
     }
@@ -100,35 +109,68 @@ public class PlumbingCLI {
         }
     }
 
-    private void manageCompany(Company kAndF) {
+    private void manageCompany(Company company) {
         while (true) {
             //Company management
             int choice = menu.companyManagementOptions();
             if (choice == 1) {
                 //Adding Employee
-                kAndF.addEmployee(created());
+                company.addEmployee(created());
 
             } else if (choice == 2) {
 
                 //select an existing employee
-                int employeeID = getEmployIdToEdit(kAndF.getEmployees());
+                int employeeID = getEmployIdToEdit(company.getEmployees());
 
                 //user has provided a valid employee ID to edit and confirmed, loading editing menu
-                editEmployee(kAndF, employeeID);
+                editEmployee(company, employeeID);
 
             } else if (choice == 3) {
+                //Lists various things about employees
+                choice = menu.listEmployeesOptions();
+                employeeOptions(choice, company.getEmployees());
                 //list all employees
-                menu.listAllEmployees(kAndF.getEmployees());
             } else if (choice == 4) {
                 //add a task
                 menu.hereMessage();
             } else if (choice == 5) {
                 //edit a task
                 menu.hereMessage();
-            } else {
+            } else if(choice == 6){
                 break;
+            } else {
+                System.out.println("You shouldn't be seeing this. Contain the search");
             }
         }
+    }
+
+    private void employeeOptions(int choice, TreeMap<Integer, Employee> employees) {
+
+        if (choice == 1) {
+            menu.listAllEmployees(employees);
+
+        } else if (choice == 2) {
+            /*
+I believe this method should interact with the database to track concurrent entries from others rather than the built
+in data.
+
+for(Map.Entry<Integer, Employee> current: employees.entrySet()){
+                if(LocalDate.now().getMonth() == current.getValue().getStartDate().getMonth()){
+                    //display their info plus how many years from hire date
+                    int years = LocalDate.now().getYear() - current.getValue().getStartDate().getYear();
+                    menu.displayEmployeeAnniversary(current.getValue(), years);
+                }
+            }*/
+            List<Employee> employeeAnni = employeeDao.getEmployeeAnniversaries();
+            for (Employee current : employeeAnni) {
+                int years = LocalDate.now().getYear() - current.getStartDate().getYear();
+                menu.displayEmployeeAnniversary(current, years);
+            }
+            menu.breakLines();
+        } else {
+            menu.returningMessage();
+        }
+
     }
 
     private void editEmployee(Company kAndF, int employeeID) {
