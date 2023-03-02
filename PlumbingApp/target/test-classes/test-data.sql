@@ -45,4 +45,18 @@ CREATE TABLE work_order (
                             CONSTRAINT FK_work_order_cust FOREIGN KEY(cust_id) REFERENCES customer(cust_id)
 );
 
+
+INSERT INTO employee (first_name, last_name, st_address, zip_code, phone_number, email, date_of_hire, date_of_birth)
+VALUES('Kyle', 'Flinner', '123 rainbow',
+       '43223', '6147777777', 'abc123@gmail.com', now() , '1992-04-04');
+INSERT INTO employee (first_name, last_name, st_address, zip_code, phone_number, email, date_of_hire, date_of_birth)
+VALUES('Kyle', 'Flinner', '123 rainbow',
+       '43223', '6147767777', 'abc109@gmail.com', now(), '2001-12-01');
+INSERT INTO employee (first_name, last_name, st_address, zip_code, phone_number, email, date_of_hire, date_of_birth)
+VALUES('Kyle', 'Flinner', '123 rainbow',
+       '43223', '6147777767', 'abc456@gmail.com', '2020-01-01', '1890-05-20');
+
+
+
+
 COMMIT;

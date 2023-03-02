@@ -80,7 +80,6 @@ public class PlumbingCLI {
                 break;
             } else{
                 System.out.println("You shouldn't be seeing this. Contain the search");
-                choice = menu.plumbingResourceOptions();
             }
         }
     }

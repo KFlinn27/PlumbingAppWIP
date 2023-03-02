@@ -10,6 +10,9 @@ public interface EmployeeDao {
     Returns all employees currently in the database. Only returns first
     name, last name and ID for privacy purposes.
      */
+
+    public Employee getEmployee(int id);
+
     public List<Employee> getAllEmployees();
 
     public Employee createEmployee(Employee employee);

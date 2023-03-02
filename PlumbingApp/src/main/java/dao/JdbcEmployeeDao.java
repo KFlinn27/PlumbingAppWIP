@@ -18,6 +18,18 @@ public class JdbcEmployeeDao implements EmployeeDao{
     }
 
     @Override
+    public Employee getEmployee(int id){
+        Employee employee = null;
+        String sql = "SELECT employ_id, first_name, last_name, st_address, zip_code, phone_number, email, date_of_birth, date_of_hire " +
+                "From employee where employ_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
+        if(results.next()){
+           employee = mapEmployeeFromRowSet(results);
+        }
+        return employee;
+    }
+
+    @Override
     public List<Employee> getAllEmployees() {
         List<Employee> employees = new ArrayList<>();
 
@@ -37,7 +49,7 @@ public class JdbcEmployeeDao implements EmployeeDao{
         String sql = "INSERT INTO employee (first_name, last_name, st_address, zip_code, phone_number, email, date_of_birth," +
                 " date_of_hire) VALUES(?, ?, ?, ?, ?, ?, ?, ?) RETURNING employ_id;";
         Integer empID = jdbcTemplate.queryForObject(sql, Integer.class, employee.getFirstName(), employee.getLastName(), employee.getStreetAddress(),
-                employee.getZipcode(), employee.getPhoneNumber(), employee.getEmailAddress(), LocalDate.now(), employee.getStartDate());
+                employee.getZipcode(), employee.getPhoneNumber(), employee.getEmailAddress(), employee.getDateOfBirth(), employee.getStartDate());
         employee.setEmployID(empID);
         return employee;
 

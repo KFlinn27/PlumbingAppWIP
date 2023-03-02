@@ -134,6 +134,7 @@ public class PlumbingMenu {
         System.out.println("You're here");
     }
 
+    //TODO insert choice 0 as default exit, change this method and methods in main CLI to accomodate
     public int userChoice(int lower, int upper) {
         int choice = 0;
         try {
@@ -201,7 +202,7 @@ public class PlumbingMenu {
     }
 
     public void listAllEmployees(TreeMap<Integer, Employee> employees) {
-        System.out.println(wrap("Here are all current employees"));
+        System.out.println(wrap("look at this"));
         if (employees == null || employees.size() == 0){
             System.out.println("Employees have not been initiated. Or there" +
                     "are no employees in the company.");}
