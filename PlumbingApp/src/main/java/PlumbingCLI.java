@@ -1,14 +1,14 @@
-import Task.PlumbingMenu;
 import dao.JdbcCustomerDao;
 import dao.JdbcEmployeeDao;
 import org.apache.commons.dbcp2.BasicDataSource;
 import person.Employee;
+import workorder.Task;
 
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 public class PlumbingCLI {
@@ -97,10 +97,10 @@ public class PlumbingCLI {
                 //blacklist a customer
                 menu.hereMessage();
             } else if (choice == 4) {
-                //assign work order to customer
+                //assign work order to customer or employee
                 menu.hereMessage();
             } else if (choice == 5) {
-                //close a work order assigned to a customer
+                //close a work order assigned to a customer or employee
                 menu.hereMessage();
             } else {
                 break;
@@ -130,7 +130,15 @@ public class PlumbingCLI {
                 employeeOptions(choice, company.getEmployees());
                 //list all employees
             } else if (choice == 4) {
-                //add a task
+                //add a task that can be automatically added to a work order based on consistent pricing
+                String taskToCreate = menu.createTask();
+                Task taskAdding = buildTask(taskToCreate);
+                if(taskAdding != null){
+                    System.out.println();
+                }
+                else{
+                    //inform the user the task was not valid and why
+                }
                 menu.hereMessage();
             } else if (choice == 5) {
                 //edit a task
@@ -140,6 +148,21 @@ public class PlumbingCLI {
             } else {
                 System.out.println("You shouldn't be seeing this. Contain the search");
             }
+        }
+    }
+
+    private Task buildTask(String taskToCreate) {
+        String[] task = taskToCreate.split("|");
+        if(task.length == 5){
+            String name = task[0];
+            BigDecimal cost = BigDecimal.valueOf(Double.parseDouble(task[1]));
+            String description = task[2];
+            String material = task[3];
+            double labor = Double.parseDouble(task[4]);
+            return new Task(name, cost, description, material, labor);
+        }
+        else{
+            return null;
         }
     }
 

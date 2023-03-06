@@ -1,7 +1,7 @@
 package person;
 
-import Task.Assignable;
-import Task.Task;
+import workorder.Task;
+import workorder.WorkOrder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +14,8 @@ public class Person {
     private String zipcode;
     private String phoneNumber;
     private String emailAddress;
-    private boolean hasOpenWorkOrder = false;
-    private List<Assignable> openWorkOrders = new ArrayList<>();
-    private List<Assignable> closedWorkOrders = new ArrayList<>();
+    private List<WorkOrder> openWorkOrders = new ArrayList<>();
+    private List<WorkOrder> closedWorkOrders = new ArrayList<>();
 
     public Person(){}
 
@@ -30,17 +29,17 @@ public class Person {
         this.emailAddress = emailAddress;
     }
 
-    public void addWorkOrder(Task workOrder){
-        openWorkOrders.add(workOrder);
-        hasOpenWorkOrder = true;
+    public boolean hasOpenWorkOrders(){
+        return openWorkOrders.size() > 0;
     }
 
-    public void closeWorkOrder(Task workOrder){
+    public void addWorkOrder(WorkOrder workOrder){
+        openWorkOrders.add(workOrder);
+    }
+
+    public void closeWorkOrder(WorkOrder workOrder){
         openWorkOrders.remove(workOrder);
         closedWorkOrders.add(workOrder);
-        if(openWorkOrders.size() > 0){
-            hasOpenWorkOrder = false;
-        }
     }
 
     public String getPhoneNumber() {
@@ -92,27 +91,11 @@ public class Person {
         this.zipcode = zipcode;
     }
 
-    public boolean isHasOpenWorkOrder() {
-        return hasOpenWorkOrder;
-    }
-
-    public void setHasOpenWorkOrder(boolean hasOpenWorkOrder) {
-        this.hasOpenWorkOrder = hasOpenWorkOrder;
-    }
-
-    public List<Assignable> getOpenWorkOrders() {
+    public List<WorkOrder> getOpenWorkOrders() {
         return openWorkOrders;
     }
 
-    public void setOpenWorkOrders(List<Assignable> openWorkOrders) {
-        this.openWorkOrders = openWorkOrders;
-    }
-
-    public List<Assignable> getClosedWorkOrders() {
+    public List<WorkOrder> getClosedWorkOrders() {
         return closedWorkOrders;
-    }
-
-    public void setClosedWorkOrders(List<Assignable> closedWorkOrders) {
-        this.closedWorkOrders = closedWorkOrders;
     }
 }
